@@ -1,4 +1,4 @@
-﻿const express = require('express');
+const express = require('express');
 const cors = require('cors');
 const fetch = require('node-fetch');
 const crypto = require('crypto');
@@ -52,7 +52,7 @@ const ADMIN_LOGIN_WINDOW_MS = Number(process.env.ADMIN_LOGIN_WINDOW_MS || 1000 *
 const ADMIN_LOGIN_MAX_ATTEMPTS = Number(process.env.ADMIN_LOGIN_MAX_ATTEMPTS || 10);
 const ADMIN_BLOCK_MS = Number(process.env.ADMIN_BLOCK_MS || 1000 * 60 * 30);
 const ORDERS_FILE_PATH = process.env.ORDERS_FILE_PATH || path.join(__dirname, 'data', 'orders.json');
-const CDEK_SENDER_COMPANY = process.env.CDEK_SENDER_COMPANY || 'Illusive Store';
+const CDEK_SENDER_COMPANY = process.env.CDEK_SENDER_COMPANY || 'Serafim';
 const CDEK_SENDER_NAME = process.env.CDEK_SENDER_NAME || 'Администратор магазина';
 const CDEK_SENDER_EMAIL = process.env.CDEK_SENDER_EMAIL || '';
 const CDEK_SENDER_PHONE = process.env.CDEK_SENDER_PHONE || '';
@@ -1344,7 +1344,7 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log('=== Illusive Store Backend ===');
+    console.log('=== Serafim Backend ===');
     console.log(`Server is running on port ${PORT}`);
     console.log(`Health check: http://localhost:${PORT}/api/health`);
     console.log(`NODE_ENV: ${NODE_ENV}`);

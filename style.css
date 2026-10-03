@@ -2797,27 +2797,6 @@ body.modal-open {
 }
 
 /* ===== 2026 UI Refresh Layer ===== */
-@font-face {
-    font-family: 'Old London';
-    font-style: normal;
-    font-weight: 400;
-    src: local('Old London'),
-         url('https://fonts.cdnfonts.com/s/7865/Olondon_.woff') format('woff'),
-         url('https://fonts.cdnfonts.com/s/7865/OldLondon.woff') format('woff');
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'oldlondon';
-    font-style: normal;
-    font-weight: 400;
-    src: local('oldlondon'),
-         local('Old London'),
-         url('https://fonts.cdnfonts.com/s/7865/Olondon_.woff') format('woff'),
-         url('https://fonts.cdnfonts.com/s/7865/OldLondon.woff') format('woff');
-    font-display: swap;
-}
-
 :root {
     --ui-bg: #f3f5f9;
     --ui-surface: #ffffff;
@@ -3178,7 +3157,7 @@ header {
     }
 }
 
-/* ===== Wordmark: ILLUSIVE (Old London only) ===== */
+/* ===== Serafim wordmark ===== */
 .logo-container {
     display: flex;
     align-items: center;
@@ -3186,10 +3165,11 @@ header {
 }
 
 .brand-wordmark {
-    font-family: 'oldlondon', 'Old London', 'OldLondon', 'Old English Text MT', 'Blackletter', serif !important;
-    font-size: clamp(34px, 4.6vw, 56px);
-    line-height: 1;
-    letter-spacing: 0.03em;
+    font-family: 'Cormorant Garamond', 'Times New Roman', serif !important;
+    font-size: clamp(36px, 4.8vw, 58px);
+    font-weight: 600;
+    line-height: 0.95;
+    letter-spacing: 0.045em;
     color: #0d1018;
     user-select: none;
     text-rendering: geometricPrecision;

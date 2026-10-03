@@ -1,4 +1,4 @@
-﻿// Main application script
+// Main application script
 document.addEventListener('DOMContentLoaded', function() {
     // State management
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let productsData = [];
     
     // Configuration
-    const BACKEND_URL = window.BACKEND_URL || (window.location.hostname === 'localhost'
+    const BACKEND_URL = window.BACKEND_URL || (['localhost', '127.0.0.1'].includes(window.location.hostname)
         ? 'http://localhost:3000'
         : 'https://lol-32u2.onrender.com');
     const USE_REAL_CDEK = true; // Используем реальный API СДЭК
@@ -222,7 +222,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize the app
     function init() {
-        console.log('=== ILLUSIVE STORE ===');
+        console.log('=== SERAFIM STORE ===');
         console.log('Backend URL:', BACKEND_URL);
         console.log('CDEK API:', USE_REAL_CDEK ? 'ENABLED' : 'DISABLED');
 
