@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Illusive Store Admin</title>
+  <title>Serafim — Панель администратора</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -520,13 +520,13 @@
 <body>
   <div class="wrap">
     <div class="card" id="login-card">
-      <h1 class="title">Панель администратора <span class="badge">Illusive Store</span></h1>
+      <h1 class="title">Панель администратора <span class="badge">Serafim</span></h1>
       <p class="subtitle">Доступ только для владельца магазина</p>
 
       <div class="grid-2" style="margin-top: 12px;">
         <div>
           <label for="admin-login">Логин</label>
-          <input id="admin-login" autocomplete="username" placeholder="admin">
+          <input id="admin-login" autocomplete="username" placeholder="serafim">
         </div>
         <div>
           <label for="admin-password">Пароль</label>
@@ -656,7 +656,9 @@
 
   <script>
     (function () {
-      const BACKEND_URL = window.BACKEND_URL || 'https://lol-32u2.onrender.com';
+      const BACKEND_URL = window.BACKEND_URL || (['localhost', '127.0.0.1'].includes(window.location.hostname)
+        ? 'http://localhost:3000'
+        : 'https://lol-32u2.onrender.com');
       const TOKEN_KEY = 'adminToken';
 
       const loginCard = document.getElementById('login-card');
@@ -1011,6 +1013,11 @@
       });
 
       checkSession();
+    })();
+  </script>
+</body>
+</html>
+;
     })();
   </script>
 </body>

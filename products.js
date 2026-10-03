@@ -1,15 +1,44 @@
-// Products data with more items for better testing
+// Product catalog fallback used when the backend is unavailable.
 const products = [
     {
         id: 1,
-        name: "vendeta t-shirt",
+        name: "Синий лонгслив-поло с принтом креста",
         price: 2499,
-        image: "images/products/front.jpg", // основное изображение
-        images: [
-            "images/products/front.jpg", // передняя часть - индекс 0
-            "images/products/back.jpg"   // задняя часть - индекс 1
-        ],
-        description: "Оверсайз футболка из кулирной глади премиального качества(хлопок 94% лайкра 6%)"
+        image: "images/products/1.JPG",
+        images: ["images/products/1.JPG"],
+        description: "Синее поло с длинным рукавом, воротником и пуговицами. На передней части — деревянный крест с цветочным принтом и цитата на английском языке."
+    },
+    {
+        id: 2,
+        name: "Серое худи с распятием",
+        price: 2499,
+        image: "images/products/2.JPG",
+        images: ["images/products/2.JPG"],
+        description: "Светло-серое худи с капюшоном и крупным принтом распятия на груди."
+    },
+    {
+        id: 3,
+        name: "Черный рюкзак с библейским принтом",
+        price: 2499,
+        image: "images/products/3.JPG",
+        images: ["images/products/3.JPG"],
+        description: "Черный рюкзак с изображением Иисуса и текстом библейского стиха на переднем кармане; на молнии — декоративный крест."
+    },
+    {
+        id: 4,
+        name: "Серое худи «The Only Way»",
+        price: 2499,
+        image: "images/products/4.JPG",
+        images: ["images/products/4.JPG"],
+        description: "Светло-серое худи с принтом голубого неба и надписью «the only way», дополненное голубыми накладками на локтях."
+    },
+    {
+        id: 5,
+        name: "Серое худи «If she not from God»",
+        price: 2499,
+        image: "images/products/5.jpg",
+        images: ["images/products/5.jpg"],
+        description: "Серое худи с принтом костра и надписью «If she not from God, it’s pointless». Красные клетчатые накладки на локтях."
     }
 ];
 

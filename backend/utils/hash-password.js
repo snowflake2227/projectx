@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const password = process.argv[2];
 
 if (!password) {
-    console.error('Usage: node utils/hash-password.js "Bulldog3_Lusty1_Footbath9_Clench4_Unleash8"');
+    console.error('Usage: node utils/hash-password.js "<strong-password>"');
     process.exit(1);
 }
 

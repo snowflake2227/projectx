@@ -1,7 +1,7 @@
 {
-  "name": "illusive-store-backend",
+  "name": "serafim-store-backend",
   "version": "1.0.0",
-  "description": "Backend for Illusive Store e-commerce with real CDEK integration",
+  "description": "Backend for Serafim e-commerce with CDEK and YooKassa integration",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -18,7 +18,7 @@
     "nodejs",
     "express"
   ],
-  "author": "Illusive Store",
+  "author": "Serafim",
   "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",

@@ -1,4 +1,4 @@
-﻿// Main application script
+// Main application script
 document.addEventListener('DOMContentLoaded', function() {
     // State management
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let productsData = [];
     
     // Configuration
-    const BACKEND_URL = window.BACKEND_URL || (window.location.hostname === 'localhost'
+    const BACKEND_URL = window.BACKEND_URL || (['localhost', '127.0.0.1'].includes(window.location.hostname)
         ? 'http://localhost:3000'
         : 'https://lol-32u2.onrender.com');
     const USE_REAL_CDEK = true; // Используем реальный API СДЭК
@@ -222,11 +222,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize the app
     function init() {
-        console.log('=== ILLUSIVE STORE ===');
+        console.log('=== SERAFIM STORE ===');
         console.log('Backend URL:', BACKEND_URL);
         console.log('CDEK API:', USE_REAL_CDEK ? 'ENABLED' : 'DISABLED');
 
         loadProducts().finally(() => {
+            reconcileCartWithCatalog();
             renderProducts();
         });
         updateCartCount();
@@ -319,6 +320,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    function reconcileCartWithCatalog() {
+        const currentCart = cart.filter(item => productsData.some(product =>
+            String(product.id) === String(item.id) && product.name === item.name
+        ));
+        if (currentCart.length === cart.length) return;
+
+        cart = currentCart;
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartCount();
+        if (currentPage === 'cart') loadCart();
+    }
+
     // Close all modals
     function closeModals() {
         paymentModal.style.display = 'none';
@@ -1994,6 +2007,11 @@ async function selectPVZ(pvzData) {
         if (!product) return;
         
         const productDetailPage = document.getElementById('product-detail');
+        const imageDots = product.images.map((_, index) => `
+            <div class="dot ${index === 0 ? 'active' : ''}" data-index="${index}" title="Фото ${index + 1}">
+                <span></span>
+            </div>
+        `).join('');
         productDetailPage.innerHTML = `
             <div class="product-detail">
                 <div class="product-image-section">
@@ -2001,14 +2019,7 @@ async function selectPVZ(pvzData) {
                         <img src="${product.images[0]}" alt="${product.name}" class="product-image" id="main-product-image">
                     </div>
                     
-                    <div class="image-dots" id="image-dots">
-                        <div class="dot active" data-index="0" title="Front side">
-                            <span></span>
-                        </div>
-                        <div class="dot" data-index="1" title="Back side">
-                            <span></span>
-                        </div>
-                    </div>
+                    <div class="image-dots" id="image-dots">${imageDots}</div>
                 </div>
                 
                 <div class="product-details">
