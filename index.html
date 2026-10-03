@@ -1,0 +1,694 @@
+﻿
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Illusive Store</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png?v=2">
+    <link rel="shortcut icon" href="images/favicon.png?v=2">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/favicon.png?v=2">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/old-london" rel="stylesheet">
+</head>
+<body>
+    
+    <!-- Header -->
+    <header>
+    <div class="container header-container">
+        <a href="#" class="logo" data-page="home">
+            <div class="logo-container">
+                <span class="brand-wordmark" aria-label="Illusive">ILLUSIVE</span>
+            </div>
+        </a>
+
+        <div class="cart-icon" data-page="cart">
+            <i class="fas fa-shopping-bag fa-lg"></i>
+            <span class="cart-count">0</span>
+        </div>
+    </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Home Page -->
+        <section id="home" class="page active">
+            <div class="products-header">
+                <h1 class="products-title">All products</h1>
+            </div>
+            
+            <div class="products-grid" id="products-grid">
+                <!-- Products will be loaded by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Product Detail Page -->
+        <section id="product-detail" class="page">
+            <!-- Product detail will be loaded by JavaScript -->
+        </section>
+
+        <!-- Cart Page -->
+        <section id="cart" class="page">
+            <div class="cart-container">
+                <h2 class="cart-title">Ваша корзина</h2>
+                
+                <div class="cart-items" id="cart-items">
+                    <!-- Cart items will be loaded by JavaScript -->
+                </div>
+                
+                <div class="cart-total">
+                    <span>Итого:</span>
+                    <span id="cart-total">0 ₽</span>
+                </div>
+                
+                <div style="text-align: right; margin-top: 20px;">
+                    <button class="checkout-btn" id="checkout-btn">Оформить заказ</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Checkout Page -->
+        <section id="checkout" class="page">
+            <div class="checkout-container">
+                <h2 class="checkout-title">Оформление заказа</h2>
+                
+                <!-- Progress Steps -->
+                <div class="checkout-steps">
+                    <div class="step-indicator">
+                        <div class="step active" data-step="1">
+                            <span class="step-number">1</span>
+                            <span class="step-label">Контактные данные</span>
+                        </div>
+                        <div class="step" data-step="2">
+                            <span class="step-number">2</span>
+                            <span class="step-label">Доставка СДЭК</span>
+                        </div>
+                        <div class="step" data-step="3">
+                            <span class="step-number">3</span>
+                            <span class="step-label">Оплата</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="checkout-content">
+                    <form id="checkout-form">
+                        <!-- Step 1: Customer Info -->
+                        <div class="checkout-step active" id="step-1">
+                            <h3>Контактная информация</h3>
+                            <p class="step-description">Пожалуйста, заполните все обязательные поля</p>
+                            
+                            <div class="form-group">
+                                <label class="form-label required">ФИО получателя</label>
+                                <input type="text" class="form-input" id="checkout-name" 
+                                       placeholder="Иванов Иван Иванович" required
+                                       pattern="[А-ЯЁа-яёA-Za-z\s]{2,}" minlength="2">
+                                <small class="form-hint">Только буквы и пробелы, минимум 2 символа</small>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label required">Телефон</label>
+                                    <input type="tel" class="form-input" id="checkout-phone" 
+                                           placeholder="+7 (999) 123-45-67" required>
+                                    <small class="form-hint">Формат: +7 XXX XXX-XX-XX</small>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label required">Email</label>
+                                    <input type="email" class="form-input" id="checkout-email" 
+                                           placeholder="example@mail.ru" required>
+                                    <small class="form-hint">Для отправки подтверждения заказа</small>
+                                </div>
+                            </div>
+                            
+                            <div class="checkout-actions">
+                                <button type="button" class="back-to-cart-btn secondary-btn" data-page="cart">
+                                    <i class="fas fa-arrow-left"></i> Вернуться в корзину
+                                </button>
+                                <button type="button" class="next-step-btn submit-btn" data-step="2">
+                                    Далее: Доставка <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 2: Delivery (only CDEK pickup) -->
+                        <div class="checkout-step" id="step-2">
+                            <h3>Доставка через СДЭК</h3>
+                            <p class="step-description">Выберите город и пункт выдачи заказа</p>
+                            
+                            <div class="delivery-method active">
+                                <div class="method-header">
+                                    <i class="fas fa-store"></i>
+                                    <div class="method-info">
+                                        <h4>В ПВЗ СДЭК</h4>
+                                        <p class="method-description">Заберите заказ в удобном пункте выдачи</p>
+                                    </div>
+                                    <span class="method-price" id="delivery-price">Выберите ПВЗ</span>
+                                </div>
+                                <div class="method-details">
+                                    <p><i class="fas fa-clock"></i> Срок доставки: 2-5 дней</p>
+                                    <p><i class="fas fa-box"></i> Бесплатное хранение: 7 дней</p>
+                                </div>
+                            </div>
+                            
+                            <!-- City Selection -->
+                            <div class="form-group">
+                                <label class="form-label required">Выберите город</label>
+                                <div class="search-container">
+                                    <input type="text" class="form-input" id="city-search" 
+                                           placeholder="Начните вводить название города..." required>
+                                    <div class="dropdown" id="cities-dropdown"></div>
+                                </div>
+                                <small class="form-hint">Минимум 2 символа для поиска</small>
+                            </div>
+
+                            <!-- PVZ Selection -->
+    <div class="form-group" id="pvz-container" style="display: none;">
+    <label class="form-label required">Выберите пункт выдачи</label>
+    
+    <!-- ПОЛЕ ДЛЯ ПОИСКА ПВЗ -->
+    <div class="search-container" style="position: relative;">
+        <input type="text" 
+               class="form-input" 
+               id="pvz-search" 
+               placeholder="Введите улицу, район или название ПВЗ..."
+               autocomplete="off"
+               style="margin-bottom: 10px; padding-left: 40px;">
+        <div class="search-icon" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #999;">
+            <i class="fas fa-search"></i>
+        </div>
+        <button type="button" 
+                id="clear-search-btn" 
+                style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #999; font-size: 20px; cursor: pointer; display: none;">
+            ×
+        </button>
+    </div>
+    
+    <!-- СЧЕТЧИК РЕЗУЛЬТАТОВ -->
+    <div id="pvz-results-info" style="margin-bottom: 10px; display: none;">
+        <span style="font-size: 13px; color: #666;">
+            Найдено: <span id="pvz-found-count">0</span> ПВЗ
+            <button type="button" id="show-all-pvz-btn" style="margin-left: 10px; background: none; border: none; color: #007bff; cursor: pointer; font-size: 12px;">
+                <i class="fas fa-list"></i> Показать все
+            </button>
+        </span>
+    </div>
+    
+    <!-- ДРОПДАУН С РЕЗУЛЬТАТАМИ -->
+    <div class="search-container">
+        <div class="dropdown" id="pvz-dropdown"></div>
+    </div>
+    
+    <!-- ВЫБРАННЫЙ ПВЗ -->
+    <div id="selected-pvz" class="selected-pvz"></div>
+    
+    <small class="form-hint">
+        <i class="fas fa-lightbulb"></i> Ищите по улице, району, номеру дома или названию ПВЗ
+    </small>
+</div>
+                            
+                            <!-- Loading indicator for PVZ -->
+                            <div id="pvz-loading" style="display: none; text-align: center; padding: 20px;">
+                                <div class="loading"></div>
+                                <p>Загрузка пунктов выдачи...</p>
+                            </div>
+                            
+                            <div class="checkout-actions">
+                                <button type="button" class="prev-step-btn secondary-btn" data-step="1">
+                                    <i class="fas fa-arrow-left"></i> Назад
+                                </button>
+                                <button type="button" class="next-step-btn submit-btn" data-step="3">
+                                    Далее: Оплата <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 3: Payment -->
+                        <div class="checkout-step" id="step-3">
+                            <h3>Оплата заказа</h3>
+                            <p class="step-description">Выберите способ оплаты и подтвердите заказ</p>
+                            
+                            <div class="payment-methods">
+                                <div class="payment-method active" data-type="card">
+                                    <div class="method-header">
+                                        <i class="fas fa-credit-card"></i>
+                                        <h4>Банковской картой онлайн</h4>
+                                    </div>
+                                    <p class="method-description">Оплата картой Visa, Mastercard, МИР</p>
+                                </div>
+                            
+                            </div>
+                            <!-- Order Information -->
+                            <div class="order-info-summary">
+                                <h4>Информация о заказе</h4>
+                                <div class="info-row">
+                                    <span>Получатель:</span>
+                                    <span id="summary-customer-name">Не указано</span>
+                                </div>
+                                <div class="info-row">
+                                    <span>Телефон:</span>
+                                    <span id="summary-customer-phone">Не указано</span>
+                                </div>
+                                <div class="info-row">
+                                    <span>Email:</span>
+                                    <span id="summary-customer-email">Не указано</span>
+                                </div>
+                                <div class="info-row">
+                                    <span>Город:</span>
+                                    <span id="summary-delivery-city">Не выбран</span>
+                                </div>
+                                <div class="info-row">
+                                    <span>ПВЗ:</span>
+                                    <span id="summary-delivery-pvz">Не выбран</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Order Summary -->
+                            <div class="order-summary">
+                                <h4>Стоимость заказа</h4>
+                                <div class="summary-items" id="summary-items">
+                                    <!-- Items will be loaded by JavaScript -->
+                                </div>
+                                <div class="summary-totals">
+                                    <div class="summary-row">
+                                        <span>Товары:</span>
+                                        <span id="summary-subtotal">0 ₽</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span>Доставка:</span>
+                                        <span id="summary-delivery">0 ₽</span>
+                                    </div>
+                                    <div class="summary-row total">
+                                        <span>Итого к оплате:</span>
+                                        <span id="summary-total">0 ₽</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Terms Agreement -->
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agree-terms" required>
+                                    <span>Я согласен с <a href="#" class="terms-link" data-page="privacy-policy">политикой конфиденциальности</a> и <a href="#" class="terms-link" data-page="public-offer">публичной офертой</a>, и даю согласие на обработку персональных данных</span>
+                                </label>
+                            </div>
+                            
+                            <div class="checkout-actions">
+                                <button type="button" class="prev-step-btn secondary-btn" data-step="2">
+                                    <i class="fas fa-arrow-left"></i> Назад
+                                </button>
+                                <button type="submit" class="submit-order-btn submit-btn">
+                                    <i class="fas fa-lock"></i> Оформить заказ
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Payment Result Page -->
+        <section id="payment-result" class="page">
+            <div class="payment-result-wrap">
+                <div class="payment-result-card">
+                    <div class="payment-result-icon pending" id="payment-result-icon">
+                        <i class="fas fa-circle-notch"></i>
+                    </div>
+                    <h2 class="payment-result-title" id="payment-result-title">Проверяем статус оплаты</h2>
+                    <p class="payment-result-message" id="payment-result-message">Подождите, идет запрос к платежному провайдеру.</p>
+
+                    <div class="payment-result-meta">
+                        <div class="payment-result-row">
+                            <span>Заказ</span>
+                            <strong id="payment-result-order">-</strong>
+                        </div>
+                        <div class="payment-result-row">
+                            <span>Сумма</span>
+                            <strong id="payment-result-amount">0 ₽</strong>
+                        </div>
+                        <div class="payment-result-row">
+                            <span>Статус</span>
+                            <strong id="payment-result-status">-</strong>
+                        </div>
+                    </div>
+
+                    <div class="payment-result-actions">
+                        <button class="secondary-btn" id="payment-result-check-btn" style="display:none;">
+                            <i class="fas fa-sync-alt"></i> Проверить статус
+                        </button>
+                        <button class="submit-btn" id="payment-result-home-btn">
+                            <i class="fas fa-home"></i> На главную
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modal Payment Window -->
+        <div id="payment-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Оплата заказа</h2>
+                    <span class="close-modal">&times;</span>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="order-info">
+                        <p><strong>Номер заказа:</strong> #<span id="payment-order-number">000001</span></p>
+                        <p><strong>Сумма к оплате:</strong> <span id="payment-amount">0 ₽</span></p>
+                        <p><strong>Получатель:</strong> <span id="payment-customer-name"></span></p>
+                    </div>
+                    
+                    <div class="card-form">
+                        <div class="form-group">
+                            <label class="form-label required">Номер карты</label>
+                            <input type="text" class="form-input" id="card-number" placeholder="0000 0000 0000 0000" maxlength="19">
+                            <div class="card-icons">
+                                <i class="fab fa-cc-visa"></i>
+                                <i class="fab fa-cc-mastercard"></i>
+                                <i class="fab fa-cc-mir"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label required">Срок действия</label>
+                                <input type="text" class="form-input" id="card-expiry" placeholder="ММ/ГГ" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label required">CVV/CVC</label>
+                                <input type="password" class="form-input" id="card-cvv" placeholder="000" maxlength="3">
+                                <i class="fas fa-question-circle help-icon" title="3 цифры на обратной стороне карты"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">Имя владельца карты</label>
+                            <input type="text" class="form-input" id="card-holder" placeholder="IVAN IVANOV">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="save-card" checked>
+                                <span>Сохранить карту для будущих покупок</span>
+                            </label>
+                        </div>
+                        
+                        <button class="submit-btn" id="process-payment-btn">
+                            <i class="fas fa-lock"></i> Оплатить <span id="payment-sum">0 ₽</span>
+                        </button>
+                        
+                        <div class="secure-payment">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Безопасная оплата. Все данные защищены</span>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-security">
+                        <p><i class="fas fa-lock"></i> Мы не храним данные вашей карты</p>
+                        <p><i class="fas fa-shield-alt"></i> Оплата защищена по стандарту PCI DSS</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Modal -->
+        <div id="success-modal" class="modal">
+            <div class="modal-content success-modal">
+                <div class="payment-success">
+                    <div class="success-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h2 class="success-title">Заказ успешно оформлен!</h2>
+                    <p class="success-message">Ваш заказ в„–<span id="order-number">000001</span> принят в обработку</p>
+                    
+                    <div class="order-details">
+                        <div class="detail-row">
+                            <span>Сумма:</span>
+                            <span id="success-order-amount">0 ₽</span>
+                        </div>
+                        <div class="detail-row">
+                            <span>Способ доставки:</span>
+                            <span>Самовывоз из ПВЗ СДЭК</span>
+                        </div>
+                        <div class="detail-row">
+                            <span>Город:</span>
+                            <span id="success-delivery-city">Не указан</span>
+                        </div>
+                        <div class="detail-row">
+                            <span>ПВЗ:</span>
+                            <span id="success-delivery-pvz">Не указан</span>
+                        </div>
+                    </div>
+                    
+                    <p class="success-details">Наш менеджер свяжется с вами для подтверждения заказа. Вы получите SMS с номером заказа СДЭК.</p>
+                    
+                    <div class="success-actions">
+                        <button class="submit-btn" id="back-to-home-btn">
+                            <i class="fas fa-home"></i> Вернуться в магазин
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Modal -->
+        <div id="error-modal" class="modal">
+            <div class="modal-content error-modal">
+                <div class="payment-error">
+                    <div class="error-icon">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <h2 class="error-title">Ошибка оформления заказа</h2>
+                    <p class="error-message" id="error-message">Произошла ошибка при обработке заказа</p>
+                    <div class="error-actions">
+                        <button class="secondary-btn" id="close-error-btn">
+                            Закрыть
+                        </button>
+                        <button class="submit-btn" id="retry-order-btn">
+                            Попробовать снова
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Privacy Policy Page -->
+    <section id="privacy-policy" class="page">
+        <div class="container">
+            <div class="privacy-container">
+                <div class="privacy-header">
+                    <a class="back-btn" data-page="home">
+                        <i class="fas fa-arrow-left"></i> На главную
+                    </a>
+                    <h2 class="privacy-title">Политика конфиденциальности</h2>
+                </div>
+
+                <div class="privacy-content">
+                    <div class="privacy-section">
+                        <h2>1. Общие положения</h2>
+                        <p>Настоящая Политика конфиденциальности действует в отношении интернет-магазина Illusive Store и регулирует порядок обработки персональных данных пользователей при продаже одежды через сайт.</p>
+                        <p>Оформляя заказ на сайте, пользователь подтверждает согласие с настоящей Политикой и обработкой данных в объеме, необходимом для продажи, оплаты и доставки товара.</p>
+                    </div>
+
+                    <div class="privacy-section">
+                        <h2>2. Какие данные мы обрабатываем</h2>
+                        <ul class="privacy-list">
+                            <li>ФИО получателя заказа.</li>
+                            <li>Номер телефона.</li>
+                            <li>Email.</li>
+                            <li>Город, выбранный пункт выдачи СДЭК (ПВЗ) или адрес доставки, введенный пользователем.</li>
+                            <li>Данные заказа: состав, сумма, номер заказа, статус.</li>
+                            <li>Технические данные: IP-адрес, cookie, данные браузера и устройства (для стабильной работы сайта и защиты от злоупотреблений).</li>
+                        </ul>
+                    </div>
+
+                    <div class="privacy-section">
+                        <h2>3. Цели обработки данных</h2>
+                        <ul class="privacy-list">
+                            <li>Оформление и сопровождение заказа.</li>
+                            <li>Организация доставки и передачи товара получателю.</li>
+                            <li>Связь с покупателем по вопросам заказа, оплаты и доставки.</li>
+                            <li>Выполнение требований законодательства РФ.</li>
+                            <li>Обеспечение безопасности и корректной работы сайта.</li>
+                        </ul>
+                    </div>
+
+                    <div class="privacy-section">
+                        <h2>4. Передача данных третьим лицам</h2>
+                        <p>Для выполнения заказа данные могут передаваться только тем лицам и сервисам, которые участвуют в продаже и доставке:</p>
+                        <ul class="privacy-list">
+                            <li>Платежному провайдеру (например, YooKassa) для проведения оплаты.</li>
+                            <li>Службе доставки СДЭК и/или курьерам для отправки и вручения товара.</li>
+                            <li>Хостинг- и техническим сервисам, обеспечивающим работу сайта.</li>
+                        </ul>
+                        <p>Курьеры и службы доставки получают только те данные, которые необходимы для доставки: ФИО, номер телефона, email (при необходимости), адрес/ПВЗ и сведения о заказе.</p>
+                    </div>
+
+                    <div class="privacy-section">
+                        <h2>5. Хранение и защита</h2>
+                        <p>Мы применяем организационные и технические меры для защиты персональных данных от утраты, неправомерного доступа, изменения и распространения.</p>
+                        <p>Данные хранятся не дольше, чем это требуется для целей обработки и соблюдения законодательства.</p>
+                    </div>
+
+                    <div class="privacy-section">
+                        <h2>6. Права пользователя</h2>
+                        <ul class="privacy-list">
+                            <li>Запросить информацию об обработке своих данных.</li>
+                            <li>Потребовать уточнение, обновление или удаление данных, если это не противоречит закону.</li>
+                            <li>Отозвать согласие на обработку данных, направив обращение продавцу.</li>
+                        </ul>
+                    </div>
+
+                    <div class="privacy-section">
+                        <h2>7. Реквизиты и контакты</h2>
+                        <p>Информация о продавце размещена в разделе <a href="#" data-page="requisites">Requisites</a>.</p>
+                    </div>
+
+                    <div class="privacy-footer">
+                        <p class="privacy-date">Редакция от 18 февраля 2026 года.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Public Offer Page -->
+    <section id="public-offer" class="page">
+        <div class="container">
+            <div class="privacy-container">
+                <div class="privacy-header">
+                    <a class="back-btn" data-page="home">
+                        <i class="fas fa-arrow-left"></i> На главную
+                    </a>
+                    <h2 class="privacy-title">Публичная оферта</h2>
+                </div>
+
+                <div class="privacy-content">
+                    <div class="privacy-section">
+                        <h2>1. Предмет оферты</h2>
+                        <p>Настоящий документ является публичной офертой продавца Illusive Store на заключение договора розничной купли-продажи одежды дистанционным способом через сайт.</p>
+                    </div>
+                    <div class="privacy-section">
+                        <h2>2. Оформление заказа</h2>
+                        <p>Покупатель оформляет заказ через сайт, указывает контактные данные, город и способ получения, после чего подтверждает заказ и оплату.</p>
+                    </div>
+                    <div class="privacy-section">
+                        <h2>3. Оплата</h2>
+                        <p>Оплата производится онлайн через доступные платежные методы. После успешной оплаты покупателю направляется подтверждение.</p>
+                    </div>
+                    <div class="privacy-section">
+                        <h2>4. Доставка и получение</h2>
+                        <p>Доставка осуществляется через СДЭК (ПВЗ/курьер в зависимости от выбранного способа). Срок и стоимость рассчитываются при оформлении заказа.</p>
+                    </div>
+                    <div class="privacy-section">
+                        <h2>5. Возврат и обмен</h2>
+                        <p>Возврат и обмен товаров осуществляются в порядке и сроки, предусмотренные действующим законодательством РФ.</p>
+                    </div>
+                    <div class="privacy-section">
+                        <h2>6. Реквизиты продавца</h2>
+                        <p>Актуальные данные продавца и ИНН размещены в разделе <a href="#" data-page="requisites">Реквизиты</a>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Delivery Info Page -->
+    <section id="delivery-info" class="page">
+        <div class="container">
+            <div class="privacy-container">
+                <div class="privacy-header">
+                    <a class="back-btn" data-page="home">
+                        <i class="fas fa-arrow-left"></i> На главную
+                    </a>
+                    <h2 class="privacy-title">Доставка и получение</h2>
+                </div>
+                <div class="privacy-content">
+                    <div class="privacy-section">
+                        <h2>Доступные способы</h2>
+                        <ul class="privacy-list">
+                            <li>Самовывоз из ПВЗ СДЭК.</li>
+                            <li>Доставка курьером СДЭК (если доступно для выбранного региона).</li>
+                        </ul>
+                    </div>
+                    <div class="privacy-section">
+                        <h2>Сроки и стоимость</h2>
+                        <p>Стоимость и срок доставки рассчитываются автоматически при оформлении заказа после выбора города и пункта выдачи/адреса.</p>
+                    </div>
+                    <div class="privacy-section">
+                        <h2>Контактные данные для доставки</h2>
+                        <p>Для передачи заказа в службу доставки используются ФИО, номер телефона, email и данные получения заказа.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Requisites Page -->
+    <section id="requisites" class="page">
+        <div class="container">
+            <div class="requisites-card">
+                <div class="requisites-head">
+                    <h2>Реквизиты</h2>
+                    <p>Seller details</p>
+                </div>
+                <div class="requisites-grid">
+                    <div class="requisites-row">
+                        <span>ФИО</span>
+                        <strong>Токтарёв Ярослав Романович</strong>
+                    </div>
+                    <div class="requisites-row">
+                        <span>INN</span>
+                        <strong>612690385939</strong>
+                    </div>
+                    <div class="requisites-row">
+                        <span>Email</span>
+                        <strong>support@illusivestore.ru</strong>
+                    </div>
+                    <div class="requisites-row">
+                        <span>Phone</span>
+                        <strong>+7 (999) 123-45-67</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="footer-title">Illusive Store</h3>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Важная информация</h3>
+                    <a href="#" class="footer-link" data-page="privacy-policy">
+                        <i class="fas fa-shield-alt"></i> Privacy Policy
+                    </a>
+                    <a href="#" class="footer-link" data-page="public-offer">
+                        <i class="fas fa-file-contract"></i> Публичная оферта
+                    </a>
+                    <a href="#" class="footer-link" data-page="delivery-info">
+                        <i class="fas fa-truck"></i> Доставка
+                    </a>
+                    <a href="#" class="footer-link" data-page="requisites">
+                        <i class="fas fa-file-invoice"></i> Реквизиты
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">© 2026 Illusive Store. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="products.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
+
+

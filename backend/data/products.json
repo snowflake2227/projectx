@@ -1,0 +1,13 @@
+[
+  {
+    "id": 1,
+    "name": "vendeta t-shirt",
+    "price": 2499,
+    "image": "images/products/front.jpg",
+    "images": [
+      "images/products/front.jpg",
+      "images/products/back.jpg"
+    ],
+    "description": "Оверсайз футболка из кулирной глади премиального качества (хлопок 94%, лайкра 6%)"
+  }
+]

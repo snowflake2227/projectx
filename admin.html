@@ -1,0 +1,1017 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Illusive Store Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-1: #f7f8fb;
+      --bg-2: #eef1f6;
+      --card: #ffffff;
+      --text: #121212;
+      --muted: #5f6673;
+      --line: #e5e7ef;
+      --accent: #111111;
+      --accent-2: #2e3f62;
+      --danger: #c0392b;
+      --ok: #1f9d55;
+      --radius: 14px;
+      --shadow: 0 10px 30px rgba(18, 18, 18, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% -20%, #dbe2f0 0%, transparent 55%),
+        radial-gradient(1100px 700px at 90% -25%, #d9e4ff 0%, transparent 50%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+    }
+
+    .wrap {
+      width: min(1120px, 100% - 32px);
+      margin: 28px auto;
+    }
+
+    .card {
+      background: linear-gradient(180deg, #ffffff, #fcfcfe);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+    }
+
+    .subtitle {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    input, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 11px 12px;
+      font-size: 14px;
+      background: #fff;
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #98a6c2;
+      box-shadow: 0 0 0 3px rgba(64, 103, 170, .12);
+    }
+
+    textarea { min-height: 96px; resize: vertical; }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    button {
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #fff;
+      border-radius: 10px;
+      padding: 9px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .12s ease, opacity .2s ease;
+    }
+
+    button:hover { transform: translateY(-1px); }
+    button:active { transform: translateY(0); }
+
+    button.secondary {
+      background: #fff;
+      color: var(--text);
+      border-color: var(--line);
+    }
+
+    button.alt {
+      background: var(--accent-2);
+      border-color: var(--accent-2);
+    }
+
+    button.danger {
+      background: var(--danger);
+      border-color: var(--danger);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      table-layout: fixed;
+    }
+
+    thead th {
+      text-align: left;
+      color: var(--muted);
+      font-weight: 700;
+      border-bottom: 1px solid var(--line);
+      padding: 10px 8px;
+    }
+
+    tbody td {
+      border-bottom: 1px solid var(--line);
+      padding: 12px 8px;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+    }
+
+    .photo-cell {
+      max-width: 320px;
+    }
+
+    .photo-text {
+      display: block;
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .muted { color: var(--muted); }
+    .status {
+      margin: 8px 0 0;
+      min-height: 20px;
+      font-size: 14px;
+    }
+
+    .status.ok { color: var(--ok); }
+    .status.err { color: var(--danger); }
+
+    .hidden { display: none !important; }
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: #0f172a;
+      color: #dbeafe;
+      border-radius: 10px;
+      padding: 12px;
+      max-height: 360px;
+      overflow: auto;
+      border: 1px solid #1e293b;
+    }
+    .mini {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 12px;
+      padding: 4px 9px;
+      border-radius: 99px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .upload-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px dashed #9aa7bf;
+      background: #f7f9fd;
+      color: #1f2f4f;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .hidden-file {
+      display: none;
+    }
+
+    .photo-grid {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+
+    .photo-card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      background: #fff;
+    }
+
+    .photo-preview {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f7f7fb;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 860px) {
+      .grid-2, .grid-3, .photo-grid { grid-template-columns: 1fr; }
+      .title { font-size: 24px; }
+      table, thead, tbody, th, td, tr { display: block; }
+      thead { display: none; }
+      tbody td { border-bottom: 0; padding: 5px 0; }
+      tbody tr {
+        border-bottom: 1px solid var(--line);
+        padding: 10px 0;
+      }
+    }
+  </style>
+  <style>
+    /* 2026 Admin polish layer */
+    :root {
+      --adm-bg: #eef2f9;
+      --adm-card: #ffffff;
+      --adm-soft: #f6f8fd;
+      --adm-line: #dfe5f0;
+      --adm-text: #101522;
+      --adm-muted: #667084;
+      --adm-accent: #111111;
+      --adm-accent-soft: #26395f;
+      --adm-danger: #c0392b;
+      --adm-ok: #1f9d55;
+      --adm-r-lg: 18px;
+      --adm-r-md: 12px;
+      --adm-shadow: 0 24px 50px rgba(16, 21, 34, 0.09);
+    }
+
+    body {
+      font-family: "Montserrat", "Segoe UI", Tahoma, sans-serif;
+      color: var(--adm-text);
+      background:
+        radial-gradient(900px 500px at 4% -10%, rgba(172, 200, 255, 0.32) 0%, transparent 62%),
+        radial-gradient(900px 500px at 98% -20%, rgba(183, 194, 255, 0.26) 0%, transparent 58%),
+        var(--adm-bg);
+    }
+
+    .wrap {
+      width: min(1200px, 100% - 24px);
+      margin: 18px auto 28px;
+    }
+
+    .card {
+      border-radius: var(--adm-r-lg);
+      border: 1px solid var(--adm-line);
+      background: linear-gradient(180deg, #fff 0%, #fbfcff 100%);
+      box-shadow: var(--adm-shadow);
+      padding: 20px;
+    }
+
+    .title {
+      letter-spacing: -0.03em;
+      font-size: clamp(28px, 3vw, 40px);
+      line-height: 1.06;
+    }
+
+    .subtitle {
+      color: var(--adm-muted);
+      font-size: 14px;
+    }
+
+    input, textarea {
+      border: 1px solid #d7deeb;
+      border-radius: var(--adm-r-md);
+      padding: 12px 13px;
+      font-size: 14px;
+      background: #fff;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #90a5cc;
+      box-shadow: 0 0 0 4px rgba(95, 129, 186, .16);
+    }
+
+    button {
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-weight: 700;
+      letter-spacing: .01em;
+      box-shadow: 0 8px 16px rgba(17, 24, 39, .12);
+    }
+
+    button.secondary {
+      background: #fff;
+      border-color: var(--adm-line);
+      box-shadow: none;
+    }
+
+    button.alt {
+      background: var(--adm-accent-soft);
+      border-color: var(--adm-accent-soft);
+    }
+
+    .status.ok { color: var(--adm-ok); }
+    .status.err { color: var(--adm-danger); }
+
+    table {
+      border: 1px solid var(--adm-line);
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    thead th {
+      background: #f7f9fe;
+      border-bottom: 1px solid var(--adm-line);
+      color: #4f5870;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    tbody tr:hover {
+      background: #f8faff;
+    }
+
+    .mono {
+      border-radius: 14px;
+      border: 1px solid #21314f;
+      background: linear-gradient(180deg, #10182c 0%, #0b1322 100%);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .03);
+      max-height: 420px;
+    }
+
+    .upload-btn {
+      border-radius: 12px;
+      background: #f3f7ff;
+      border: 1px dashed #8fa3c7;
+      color: #1e365f;
+    }
+
+    .photo-card {
+      border-radius: 12px;
+      background: var(--adm-soft);
+      border: 1px solid var(--adm-line);
+    }
+
+    .photo-preview {
+      border-radius: 10px;
+      border: 1px solid #dbe2f0;
+      background: #fff;
+      height: 150px;
+      object-fit: contain;
+    }
+
+    .badge {
+      border: 1px solid #d4dbee;
+      background: #f9fbff;
+      color: #4a5672;
+    }
+
+    @media (max-width: 860px) {
+      .wrap {
+        width: calc(100% - 14px);
+        margin-top: 10px;
+      }
+
+      .card {
+        padding: 14px;
+        border-radius: 14px;
+      }
+
+      .title {
+        font-size: 24px;
+      }
+
+      .toolbar {
+        align-items: stretch;
+      }
+
+      .toolbar > div {
+        width: 100%;
+      }
+
+      .actions {
+        width: 100%;
+      }
+
+      .actions button {
+        flex: 1 1 auto;
+      }
+
+      table {
+        border: 0;
+        background: transparent;
+      }
+
+      tbody tr {
+        background: #fff;
+        border: 1px solid var(--adm-line);
+        border-radius: 12px;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+
+      tbody td {
+        padding: 3px 0;
+      }
+
+      .mono {
+        max-height: 320px;
+      }
+    }
+
+    /* Macro motion */
+    @keyframes admFadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes admTitleIn {
+      from { opacity: 0; transform: translateY(10px); letter-spacing: 0.06em; }
+      to { opacity: 1; transform: translateY(0); letter-spacing: -0.03em; }
+    }
+
+    @keyframes admCardHover {
+      0% { box-shadow: 0 24px 50px rgba(16, 21, 34, 0.09); }
+      50% { box-shadow: 0 28px 58px rgba(38, 57, 95, 0.16); }
+      100% { box-shadow: 0 24px 50px rgba(16, 21, 34, 0.09); }
+    }
+
+    .title {
+      animation: admTitleIn .7s cubic-bezier(.2,.7,.18,1) both;
+    }
+
+    .card {
+      animation: admFadeUp .5s cubic-bezier(.2,.7,.18,1) both;
+    }
+
+    #admin-app .card:nth-child(2) { animation-delay: .06s; }
+    #admin-app .card:nth-child(3) { animation-delay: .12s; }
+    #admin-app .card:nth-child(4) { animation-delay: .18s; }
+
+    .card:hover {
+      animation: admCardHover 2s ease-in-out infinite;
+    }
+
+    tbody tr {
+      animation: admFadeUp .45s cubic-bezier(.2,.7,.18,1) both;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .title,
+      .card,
+      .card:hover,
+      tbody tr {
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" id="login-card">
+      <h1 class="title">Панель администратора <span class="badge">Illusive Store</span></h1>
+      <p class="subtitle">Доступ только для владельца магазина</p>
+
+      <div class="grid-2" style="margin-top: 12px;">
+        <div>
+          <label for="admin-login">Логин</label>
+          <input id="admin-login" autocomplete="username" placeholder="admin">
+        </div>
+        <div>
+          <label for="admin-password">Пароль</label>
+          <input id="admin-password" type="password" autocomplete="current-password" placeholder="Ваш пароль">
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="login-btn">Войти</button>
+      </div>
+      <div class="status" id="login-status"></div>
+    </div>
+
+    <div id="admin-app" class="hidden">
+      <div class="card">
+        <div class="toolbar">
+          <div>
+            <h2 style="margin:0">Управление товарами</h2>
+            <p class="subtitle">Добавляй, редактируй и удаляй товары из каталога</p>
+          </div>
+          <div class="actions" style="margin:0">
+            <button class="secondary" id="reload-btn">Обновить</button>
+            <button class="secondary" id="logout-btn">Выйти</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 id="form-title" style="margin-top:0">Новый товар</h2>
+
+        <div class="grid-2">
+          <div>
+            <label for="p-name">Название</label>
+            <input id="p-name">
+          </div>
+          <div>
+            <label for="p-price">Цена (₽)</label>
+            <input id="p-price" type="number" min="1" step="1">
+          </div>
+        </div>
+
+        <div class="photo-grid">
+          <div class="photo-card">
+            <label>Главное фото</label>
+            <label class="upload-btn" for="p-file-main">Выбрать файл</label>
+            <input id="p-file-main" class="hidden-file" type="file" accept="image/*">
+            <img id="preview-main" class="photo-preview" alt="Главное фото">
+          </div>
+          <div class="photo-card">
+            <label>Передняя сторона</label>
+            <label class="upload-btn" for="p-file-front">Выбрать файл</label>
+            <input id="p-file-front" class="hidden-file" type="file" accept="image/*">
+            <img id="preview-front" class="photo-preview" alt="Передняя сторона">
+          </div>
+          <div class="photo-card">
+            <label>Задняя сторона</label>
+            <label class="upload-btn" for="p-file-back">Выбрать файл</label>
+            <input id="p-file-back" class="hidden-file" type="file" accept="image/*">
+            <img id="preview-back" class="photo-preview" alt="Задняя сторона">
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <label for="p-description">Описание</label>
+          <textarea id="p-description"></textarea>
+        </div>
+
+        <div class="actions">
+          <button id="save-btn" class="alt">Сохранить</button>
+          <button id="cancel-edit-btn" class="secondary hidden">Отменить редактирование</button>
+        </div>
+        <div class="status" id="form-status"></div>
+      </div>
+
+      <div class="card">
+        <h2 style="margin-top:0">Список товаров</h2>
+        <div class="status" id="table-status"></div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Название</th>
+              <th>Цена</th>
+              <th>Фото</th>
+              <th>Действия</th>
+            </tr>
+          </thead>
+          <tbody id="products-body"></tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="toolbar">
+          <div>
+            <h2 style="margin:0">Заказы и данные CDEK</h2>
+            <p class="subtitle">Просмотр того, что отправлено в CDEK после оплаты</p>
+          </div>
+          <div class="actions" style="margin:0">
+            <button class="secondary" id="reload-orders-btn">Обновить заказы</button>
+          </div>
+        </div>
+        <div class="status" id="orders-status"></div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Заказ</th>
+              <th>Клиент</th>
+              <th>Оплата</th>
+              <th>CDEK</th>
+              <th>Обновлено</th>
+              <th>Действия</th>
+            </tr>
+          </thead>
+          <tbody id="orders-body"></tbody>
+        </table>
+
+        <div style="margin-top:12px">
+          <h3 style="margin:0 0 8px 0">Детали отправки в CDEK</h3>
+          <div class="mini" id="order-details-meta">Выберите заказ и нажмите "CDEK детали"</div>
+          <pre class="mono" id="order-details-json">Пока нет данных.</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const BACKEND_URL = window.BACKEND_URL || 'https://lol-32u2.onrender.com';
+      const TOKEN_KEY = 'adminToken';
+
+      const loginCard = document.getElementById('login-card');
+      const adminApp = document.getElementById('admin-app');
+      const loginStatus = document.getElementById('login-status');
+      const formStatus = document.getElementById('form-status');
+      const tableStatus = document.getElementById('table-status');
+      const productsBody = document.getElementById('products-body');
+      const ordersBody = document.getElementById('orders-body');
+      const ordersStatus = document.getElementById('orders-status');
+      const orderDetailsJson = document.getElementById('order-details-json');
+      const orderDetailsMeta = document.getElementById('order-details-meta');
+      const formTitle = document.getElementById('form-title');
+      const cancelEditBtn = document.getElementById('cancel-edit-btn');
+      const fileMain = document.getElementById('p-file-main');
+      const fileFront = document.getElementById('p-file-front');
+      const fileBack = document.getElementById('p-file-back');
+      const previewMain = document.getElementById('preview-main');
+      const previewFront = document.getElementById('preview-front');
+      const previewBack = document.getElementById('preview-back');
+
+      const fields = {
+        name: document.getElementById('p-name'),
+        price: document.getElementById('p-price'),
+        description: document.getElementById('p-description')
+      };
+
+      let editingId = null;
+      let selectedMainImage = '';
+      let selectedFrontImage = '';
+      let selectedBackImage = '';
+
+      function getToken() {
+        return localStorage.getItem(TOKEN_KEY) || '';
+      }
+
+      function setStatus(node, text, type) {
+        node.textContent = text || '';
+        node.classList.remove('ok', 'err');
+        if (type) node.classList.add(type);
+      }
+
+      function shortPhotoLabel(value) {
+        const src = String(value || '');
+        if (!src) return '';
+        if (src.startsWith('data:image/')) return '[base64 image]';
+        return src;
+      }
+
+      async function api(path, options = {}) {
+        const headers = Object.assign({ 'Content-Type': 'application/json' }, options.headers || {});
+        const token = getToken();
+        if (token) headers.Authorization = `Bearer ${token}`;
+
+        const response = await fetch(`${BACKEND_URL}${path}`, { ...options, headers });
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(data.message || data.error || `HTTP ${response.status}`);
+        }
+        return data;
+      }
+
+      function openAdmin() {
+        loginCard.classList.add('hidden');
+        adminApp.classList.remove('hidden');
+      }
+
+      function openLogin() {
+        adminApp.classList.add('hidden');
+        loginCard.classList.remove('hidden');
+      }
+
+      function readAsDataUrl(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(String(reader.result || ''));
+          reader.onerror = () => reject(new Error('Не удалось прочитать файл'));
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function clearForm() {
+        editingId = null;
+        formTitle.textContent = 'Новый товар';
+        cancelEditBtn.classList.add('hidden');
+        Object.values(fields).forEach((input) => input.value = '');
+        selectedMainImage = '';
+        selectedFrontImage = '';
+        selectedBackImage = '';
+        fileMain.value = '';
+        fileFront.value = '';
+        fileBack.value = '';
+        previewMain.removeAttribute('src');
+        previewFront.removeAttribute('src');
+        previewBack.removeAttribute('src');
+      }
+
+      function payloadFromForm() {
+        const mainImage = selectedMainImage;
+        const frontImage = selectedFrontImage;
+        const backImage = selectedBackImage;
+        return {
+          name: fields.name.value.trim(),
+          price: Number(fields.price.value),
+          image: mainImage,
+          images: [frontImage, backImage].filter(Boolean),
+          description: fields.description.value.trim()
+        };
+      }
+
+      function fillForm(item) {
+        editingId = Number(item.id);
+        formTitle.textContent = `Редактирование товара #${item.id}`;
+        cancelEditBtn.classList.remove('hidden');
+        fields.name.value = item.name || '';
+        fields.price.value = item.price || '';
+        selectedMainImage = item.image || '';
+        selectedFrontImage = Array.isArray(item.images) ? (item.images[0] || '') : '';
+        selectedBackImage = Array.isArray(item.images) ? (item.images[1] || '') : '';
+        fields.description.value = item.description || '';
+        fileMain.value = '';
+        fileFront.value = '';
+        fileBack.value = '';
+        previewMain.src = selectedMainImage;
+        previewFront.src = selectedFrontImage;
+        previewBack.src = selectedBackImage;
+      }
+
+      async function loadProducts() {
+        setStatus(tableStatus, 'Загрузка списка товаров...');
+        try {
+          const items = await api('/api/admin/products');
+          productsBody.innerHTML = '';
+
+          items.forEach((item) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${item.id}</td>
+              <td>${item.name}</td>
+              <td>${Number(item.price).toLocaleString('ru-RU')} ₽</td>
+              <td class="photo-cell"><small class="muted photo-text" title="${(item.image || '').replace(/"/g, '&quot;')}">${shortPhotoLabel(item.image)}</small></td>
+              <td>
+                <div class="actions" style="margin:0">
+                  <button class="secondary" data-act="edit" data-id="${item.id}">Изменить</button>
+                  <button class="danger" data-act="delete" data-id="${item.id}">Удалить</button>
+                </div>
+              </td>
+            `;
+            productsBody.appendChild(tr);
+          });
+
+          productsBody.querySelectorAll('button[data-act="edit"]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+              const id = Number(btn.getAttribute('data-id'));
+              const item = items.find((p) => Number(p.id) === id);
+              if (item) fillForm(item);
+            });
+          });
+
+          productsBody.querySelectorAll('button[data-act="delete"]').forEach((btn) => {
+            btn.addEventListener('click', async () => {
+              const id = Number(btn.getAttribute('data-id'));
+              if (!confirm(`Удалить товар #${id}?`)) return;
+              try {
+                await api(`/api/admin/products/${id}`, { method: 'DELETE' });
+                setStatus(tableStatus, `Товар #${id} удален`, 'ok');
+                await loadProducts();
+              } catch (e) {
+                setStatus(tableStatus, e.message, 'err');
+              }
+            });
+          });
+
+          setStatus(tableStatus, `Всего товаров: ${items.length}`, 'ok');
+        } catch (e) {
+          setStatus(tableStatus, e.message, 'err');
+        }
+      }
+
+      function paymentBadge(status) {
+        const s = String(status || '').toLowerCase();
+        if (s === 'succeeded') return 'Оплачено';
+        if (s === 'pending' || s === 'waiting_for_capture') return 'В ожидании';
+        if (s === 'canceled') return 'Отменено';
+        return status || 'unknown';
+      }
+
+      async function showOrderCdekDetails(orderId) {
+        if (!orderId) return;
+        setStatus(ordersStatus, `Загрузка деталей заказа ${orderId}...`);
+        try {
+          const data = await api(`/api/admin/orders/${encodeURIComponent(orderId)}/cdek`);
+          const cdek = data.cdek || {};
+          orderDetailsMeta.textContent = `Заказ: ${orderId} | CDEK: ${cdek.status || 'not_created'} | UUID: ${cdek.uuid || '-'} | Номер: ${cdek.cdekNumber || '-'}`;
+          orderDetailsJson.textContent = JSON.stringify({
+            orderId: data.orderId,
+            payment: data.payment,
+            cdek: data.cdek,
+            customer: data.customer,
+            delivery: data.delivery,
+            total: data.total,
+            updatedAt: data.updatedAt
+          }, null, 2);
+          setStatus(ordersStatus, `Детали заказа ${orderId} загружены`, 'ok');
+        } catch (e) {
+          setStatus(ordersStatus, e.message, 'err');
+        }
+      }
+
+      async function loadOrders() {
+        setStatus(ordersStatus, 'Загрузка заказов...');
+        try {
+          const items = await api('/api/admin/orders');
+          ordersBody.innerHTML = '';
+
+          items.forEach((item) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>
+                <strong>${item.id}</strong><br>
+                <small class="muted">${Number(item.total || 0).toLocaleString('ru-RU')} ₽</small>
+              </td>
+              <td>
+                ${item.customerName || '-'}<br>
+                <small class="muted">${item.customerPhone || ''}</small>
+              </td>
+              <td>
+                ${paymentBadge(item.paymentStatus)}<br>
+                <small class="muted">${item.paymentId || ''}</small>
+              </td>
+              <td>
+                ${item.cdekStatus || 'not_created'}<br>
+                <small class="muted">${item.cdekNumber || item.cdekUuid || ''}</small>
+              </td>
+              <td><small class="muted">${item.updatedAt ? new Date(item.updatedAt).toLocaleString('ru-RU') : '-'}</small></td>
+              <td>
+                <div class="actions" style="margin:0">
+                  <button class="secondary" data-act="cdek" data-id="${item.id}">CDEK детали</button>
+                </div>
+              </td>
+            `;
+            ordersBody.appendChild(tr);
+          });
+
+          ordersBody.querySelectorAll('button[data-act="cdek"]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+              const id = String(btn.getAttribute('data-id') || '');
+              showOrderCdekDetails(id);
+            });
+          });
+
+          setStatus(ordersStatus, `Всего заказов: ${items.length}`, 'ok');
+        } catch (e) {
+          setStatus(ordersStatus, e.message, 'err');
+        }
+      }
+
+      async function reloadAll() {
+        await Promise.all([loadProducts(), loadOrders()]);
+      }
+
+      async function login() {
+        const loginValue = document.getElementById('admin-login').value.trim();
+        const password = document.getElementById('admin-password').value;
+
+        setStatus(loginStatus, 'Проверка...');
+        try {
+          const result = await api('/api/admin/login', {
+            method: 'POST',
+            body: JSON.stringify({ login: loginValue, password })
+          });
+          localStorage.setItem(TOKEN_KEY, result.token);
+          setStatus(loginStatus, 'Успешный вход', 'ok');
+          openAdmin();
+          await reloadAll();
+        } catch (e) {
+          setStatus(loginStatus, e.message, 'err');
+        }
+      }
+
+      async function saveProduct() {
+        const payload = payloadFromForm();
+        setStatus(formStatus, 'Сохранение...');
+        try {
+          if (editingId) {
+            await api(`/api/admin/products/${editingId}`, {
+              method: 'PUT',
+              body: JSON.stringify(payload)
+            });
+            setStatus(formStatus, `Товар #${editingId} обновлен`, 'ok');
+          } else {
+            const created = await api('/api/admin/products', {
+              method: 'POST',
+              body: JSON.stringify(payload)
+            });
+            setStatus(formStatus, `Товар #${created.id} добавлен`, 'ok');
+          }
+          clearForm();
+          await loadProducts();
+        } catch (e) {
+          setStatus(formStatus, e.message, 'err');
+        }
+      }
+
+      async function checkSession() {
+        if (!getToken()) {
+          openLogin();
+          return;
+        }
+        try {
+          await api('/api/admin/session');
+          openAdmin();
+          await reloadAll();
+        } catch {
+          localStorage.removeItem(TOKEN_KEY);
+          openLogin();
+        }
+      }
+
+      document.getElementById('login-btn').addEventListener('click', login);
+      document.getElementById('save-btn').addEventListener('click', saveProduct);
+      document.getElementById('reload-btn').addEventListener('click', reloadAll);
+      document.getElementById('reload-orders-btn').addEventListener('click', loadOrders);
+      document.getElementById('cancel-edit-btn').addEventListener('click', clearForm);
+      async function bindSingleFilePicker(inputEl, kind, targetPreview, label) {
+        inputEl.addEventListener('change', async (e) => {
+          const file = (e.target.files || [])[0];
+          if (!file) return;
+          try {
+            const dataUrl = await readAsDataUrl(file);
+            if (kind === 'main') selectedMainImage = dataUrl;
+            if (kind === 'front') selectedFrontImage = dataUrl;
+            if (kind === 'back') selectedBackImage = dataUrl;
+            targetPreview.src = dataUrl;
+            setStatus(formStatus, `${label}: файл выбран`, 'ok');
+          } catch (err) {
+            setStatus(formStatus, err.message, 'err');
+          }
+        });
+      }
+
+      bindSingleFilePicker(fileMain, 'main', previewMain, 'Главное фото');
+      bindSingleFilePicker(fileFront, 'front', previewFront, 'Передняя сторона');
+      bindSingleFilePicker(fileBack, 'back', previewBack, 'Задняя сторона');
+      document.getElementById('logout-btn').addEventListener('click', async () => {
+        try {
+          await api('/api/admin/logout', { method: 'POST' });
+        } catch (_) {}
+        localStorage.removeItem(TOKEN_KEY);
+        openLogin();
+      });
+
+      checkSession();
+    })();
+  </script>
+</body>
+</html>
