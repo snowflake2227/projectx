@@ -227,6 +227,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('CDEK API:', USE_REAL_CDEK ? 'ENABLED' : 'DISABLED');
 
         loadProducts().finally(() => {
+            reconcileCartWithCatalog();
             renderProducts();
         });
         updateCartCount();
@@ -319,6 +320,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    function reconcileCartWithCatalog() {
+        const currentCart = cart.filter(item => productsData.some(product =>
+            String(product.id) === String(item.id) && product.name === item.name
+        ));
+        if (currentCart.length === cart.length) return;
+
+        cart = currentCart;
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartCount();
+        if (currentPage === 'cart') loadCart();
+    }
+
     // Close all modals
     function closeModals() {
         paymentModal.style.display = 'none';
@@ -1994,6 +2007,11 @@ async function selectPVZ(pvzData) {
         if (!product) return;
         
         const productDetailPage = document.getElementById('product-detail');
+        const imageDots = product.images.map((_, index) => `
+            <div class="dot ${index === 0 ? 'active' : ''}" data-index="${index}" title="Фото ${index + 1}">
+                <span></span>
+            </div>
+        `).join('');
         productDetailPage.innerHTML = `
             <div class="product-detail">
                 <div class="product-image-section">
@@ -2001,14 +2019,7 @@ async function selectPVZ(pvzData) {
                         <img src="${product.images[0]}" alt="${product.name}" class="product-image" id="main-product-image">
                     </div>
                     
-                    <div class="image-dots" id="image-dots">
-                        <div class="dot active" data-index="0" title="Front side">
-                            <span></span>
-                        </div>
-                        <div class="dot" data-index="1" title="Back side">
-                            <span></span>
-                        </div>
-                    </div>
+                    <div class="image-dots" id="image-dots">${imageDots}</div>
                 </div>
                 
                 <div class="product-details">
